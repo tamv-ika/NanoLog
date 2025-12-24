@@ -1,9 +1,9 @@
-#! /usr/bin/python
+#!/usr/bin/env python3
 
 import sys, getopt
 
 def printHelp():
-  print \
+  print(
 """
 Generates a configuration file to be used in benchmarking NanoLog
 (./BenchmarkConfig.h). Note that invoking this file will also
@@ -50,7 +50,7 @@ Examples:
   python genConfig.py               Generates a default configuration
 
   python genConfig.py --benchOp "NANO_LOG(\"Test\");" --iterations=100
-"""
+""")
 
 
 
@@ -188,6 +188,9 @@ namespace NanoLogConfig {
     // be a lower bound and the actual time spent sleeping may be higher.
     static const uint32_t POLL_INTERVAL_DURING_IO_US =
                                     BENCHMARK_POLL_INTERVAL_DURING_IO_US;
+
+    // File extension for the metadata file
+    static constexpr const char* METADATA_FILE_EXTENSION = ".meta";
 }
 
 #endif /* CONFIG_H */
@@ -245,15 +248,15 @@ def main(argv):
 
     with open('../runtime/Config.h', 'w') as oFile:
       oFile.write(libraryConfigTemplate)
-      print """
+      print("""
 ***********
 * WARNING *
 ***********
-      """
-      print "\"../runtime/Config.h\" has been modified to support " \
-              "the benchmark.\r\nPlease checkout a fresh version when " \
-              "building the library for other purposes with:\r\n" \
-              "\t git checkout ../runtime/Config.h\r\n"
+      """)
+      print("\"../runtime/Config.h\" has been modified to support " 
+              "the benchmark.\r\nPlease checkout a fresh version when " 
+              "building the library for other purposes with:\r\n" 
+              "\t git checkout ../runtime/Config.h\r\n")
 
 if __name__ == "__main__":
    main(sys.argv[1:])
