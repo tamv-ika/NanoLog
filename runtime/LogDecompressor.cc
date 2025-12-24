@@ -212,9 +212,24 @@ int main(int argc, char** argv) {
     }
 
     Decoder decoder;
-    if(!decoder.open(logFileName)) {
-        printf("Unable to open file %s\r\n", logFileName);
-        exit(1);
+    
+    // Try to open with separate metadata file first (realtime mode)
+    std::string metadataFileName = std::string(logFileName) + ".meta";
+    FILE *metaCheck = fopen(metadataFileName.c_str(), "r");
+    bool usesSeparateMetadata = (metaCheck != nullptr);
+    if (metaCheck) fclose(metaCheck);
+    
+    if (usesSeparateMetadata) {
+        if(!decoder.openWithSeparateMetadata(logFileName, metadataFileName.c_str())) {
+            printf("Unable to open log file %s with metadata %s\r\n", 
+                   logFileName, metadataFileName.c_str());
+            exit(1);
+        }
+    } else {
+        if(!decoder.open(logFileName)) {
+            printf("Unable to open file %s\r\n", logFileName);
+            exit(1);
+        }
     }
 
     if (find) {
