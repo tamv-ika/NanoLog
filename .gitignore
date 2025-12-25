@@ -1,5 +1,6 @@
 .idea/
 build/
+Testing/
 cmake-build-debug/
 make-all.sh
 
