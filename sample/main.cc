@@ -13,11 +13,11 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
- /**
-  * This file demonstrates the usage of the NanoLog API through the
-  * implementation of simple benchmarking application that reports the
-  * average latency and throughput of the NanoLog system.
-  */
+/**
+ * This file demonstrates the usage of the NanoLog API through the
+ * implementation of simple benchmarking application that reports the
+ * average latency and throughput of the NanoLog system.
+ */
 #include <chrono>
 
 // Required to use the NanoLog system
@@ -30,7 +30,8 @@ void runBenchmark();
 // using the NanoLog namespace (i.e. NanoLog::DEBUG).
 using namespace NanoLog::LogLevels;
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv)
+{
     // Optional: Set the output location for the NanoLog system. By default
     // the log will be output to ./compressedLog
     NanoLog::setLogFile("/tmp/logFile");
@@ -46,23 +47,22 @@ int main(int argc, char** argv) {
     NanoLog::setLogLevel(NOTICE);
 
     NANO_LOG(DEBUG, "This message wont be logged since it is lower "
-                        "than the current log level.");
+                    "than the current log level.");
 
     NANO_LOG(DEBUG, "Another message.");
 
     // All the standard printf specifiers (except %n) can be used
     char randomString[] = "Hello World";
     NANO_LOG(NOTICE, "A string, pointer, number, and float: '%s', %p, %d, %f",
-                        randomString,
-                        &randomString,
-                        512,
-                        3.14159);
+             randomString,
+             &randomString,
+             512,
+             3.14159);
 
     // Even with width and length specifiers
     NANO_LOG(NOTICE, "Shortend String: '%5s' and shortend float %0.2lf",
-                     randomString,
-                     3.14159);
-
+             randomString,
+             3.14159);
 
     runBenchmark();
 
@@ -77,23 +77,26 @@ int main(int argc, char** argv) {
     NanoLog::printConfig();
 }
 
-void runBenchmark() {
-    const uint64_t RECORDS = 1000;
+void runBenchmark()
+{
+    const uint64_t RECORDS = 10000;
 
     std::chrono::high_resolution_clock::time_point start, stop;
     double time_span;
 
     start = std::chrono::high_resolution_clock::now();
-    for (int i = 0; i < RECORDS; ++i) {
+    for (int i = 0; i < RECORDS; ++i)
+    {
         NANO_LOG(NOTICE, "Simple log message with 0 parameters");
     }
     stop = std::chrono::high_resolution_clock::now();
 
     time_span = std::chrono::duration_cast<std::chrono::duration<double>>(
-                                                        stop - start).count();
+                    stop - start)
+                    .count();
     printf("The total time spent invoking NANO_LOG with no parameters %lu "
-            "times took %0.2lf seconds (%0.2lf ns/message average)\r\n",
-            RECORDS, time_span, (time_span/RECORDS)*1e9);
+           "times took %0.2lf seconds (%0.2lf ns/message average)\r\n",
+           RECORDS, time_span, (time_span / RECORDS) * 1e9);
 
     start = std::chrono::high_resolution_clock::now();
     // Flush all pending log messages to disk
@@ -101,8 +104,9 @@ void runBenchmark() {
     stop = std::chrono::high_resolution_clock::now();
 
     time_span = std::chrono::duration_cast<std::chrono::duration<double>>(
-                                                        stop - start).count();
+                    stop - start)
+                    .count();
     printf("Flushing the log statements to disk took an additional "
-                "%0.2lf secs\r\n", time_span);
+           "%0.2lf secs\r\n",
+           time_span);
 }
-
